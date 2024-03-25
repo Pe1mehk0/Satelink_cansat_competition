@@ -384,7 +384,7 @@ void loop()
   }
   else
   {
-    if(time2 - time1 == 180000)
+    if(time2 - time1 >= 180000)
     {
       for (int i = 0; i < index_of_last_number + 1; ++i)
         {
