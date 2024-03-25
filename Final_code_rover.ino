@@ -569,6 +569,11 @@ void loop()
               break;
           }
         }
+       for (int i = 0; i < index_of_last_number + 1; ++i)
+        {
+          commands[i] = 0;
+        }
+        index_of_last_number = 0;
     }
   }
 }
