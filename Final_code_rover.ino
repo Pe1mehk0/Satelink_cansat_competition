@@ -97,7 +97,7 @@ void setup() {
   digitalWrite(6, LOW);
   if(!SD.begin(6))
   {
-    lcd.print("ERROR1");
+    lcd.print("ERROR2");
     delay(2000);
   }
   digitalWrite(8, LOW);
@@ -105,7 +105,7 @@ void setup() {
 
   if(!manager.init())
   {
-    lcd.print("ERROR2");
+    lcd.print("ERROR1");
     delay(2000);
   }
   rf95.setFrequency(RF95_FREQ);
