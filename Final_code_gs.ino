@@ -10,7 +10,7 @@
 
 #endif
 
-#define RF95_FREQ 433.0
+#define RF95_FREQ 433.4
 
 #define GS_ADDRESS 1
 #define CAN_ADDRESS 2
@@ -30,9 +30,12 @@ float a = 29.3;
 int command;
 float time1 = 0;
 float time2 = 0;
-float time3 = 0;
 char P[10];
 char T[6];
+int counter_for_speed = 0;
+float speed_of_can = 0;
+float initial_alt = 0.00;
+float initial_time = 0.00;
 
 void setup() {
   Serial.begin(9600);
@@ -49,7 +52,7 @@ void setup() {
     Serial.println ("init failed");
     while (1);
   }
-  Serial.println("Radio module started successfully");
+  //Serial.println("Radio module started successfully");
   rf95.setFrequency(RF95_FREQ);
   rf95.setTxPower(20, false);
 
@@ -90,19 +93,29 @@ void loop()
       if(P1 == 0 || T1 == 0)
       {
         P1 = atof(P);
-        T1 = atof(T) + 273.15;
+        T1 = atof(T);
       }
       pressure = atof(P);
       tempreture = atof(T); 
-      alt = a * (T1 + tempreture)/2 * log(P1/pressure);
+      alt = a * (T1 + tempreture)/2 * log(P1/pressure); // check the formula 
+      if(time1 == 0)
       {
         time1 = time2;
       }
-      time3 = (time2 - time1)/1000;
+      if (counter_for_speed % 10 == 0)
+      {
+        speed_of_can = (alt - initial_alt) / (time2 - initial_time) * 1000;
+        initial_time = time2;
+        initial_alt = alt;
+      }
+      time2 = (time2 - time1)/1000;
       Serial.println(pressure);
       Serial.println(tempreture - 273.15);
       Serial.println(alt);
-      Serial.println(time3, 1);
+      Serial.println(time2);
+      Serial.println(rf95.lastRssi(), DEC);
+      Serial.println(speed_of_can);
+      counter_for_speed += 1;
     }
   }
 }
