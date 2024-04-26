@@ -15,7 +15,7 @@
 
 #endif
 
-#define RF95_FREQ 433.0
+#define RF95_FREQ 433.4
 
 #define GS_ADDRESS 1
 #define CAN_ADDRESS 2
@@ -25,7 +25,6 @@
 RH_RF95 rf95(RFM95_CS, RFM95_INT);
 RHDatagram manager(rf95, CAN_ADDRESS);
 Adafruit_BMP280 bmp280;
-File myFile;
 
 
 float mean_pressure = 0; 
@@ -47,15 +46,18 @@ int redPin = 9;
 int greenPin = 6;
 int bluePin = 10;
 
+const int chipSelect = 11;
+
 void setup() {
 
   pinMode(buzzer, OUTPUT);
+
 
   digitalWrite(RFM95_RST, LOW);
   delay(10);
   digitalWrite(RFM95_RST, HIGH);
   delay(10);
-
+  
   pinMode(redPin, OUTPUT);
   pinMode(greenPin, OUTPUT);
   pinMode(bluePin, OUTPUT);
@@ -66,31 +68,33 @@ void setup() {
 
   bool all_ok = true;
 
+  digitalWrite(8, LOW);
+  digitalWrite(chipSelect, HIGH);
+
   if (!manager.init())
   {
     all_ok = false;
-
   }
   rf95.setFrequency(RF95_FREQ);
   rf95.setTxPower(20, false);
-  if(!bmp280.begin(0x76))
+  digitalWrite(8, HIGH);
+  digitalWrite(chipSelect, LOW);
+  if(!bmp280.begin(0x77))
   {
     all_ok = false;
   }
-  digitalWrite(8, HIGH);
-  digitalWrite(11, LOW);
-  if(!SD.begin(11))
-  {
+  if (!SD.begin(chipSelect)) {
     all_ok = false;
   }
   digitalWrite(8, LOW);
-  digitalWrite(11, HIGH);
+  digitalWrite(chipSelect, HIGH);
   if(all_ok)
   {
     digitalWrite(redPin, HIGH);
     digitalWrite(greenPin, LOW);
     digitalWrite(bluePin, HIGH);
-  }else
+  }
+  else
   {
     digitalWrite(redPin, LOW);
     digitalWrite(greenPin, HIGH);
@@ -111,7 +115,7 @@ void loop()
   {
     noTone(buzzer); 
   }
-  mean_temp = bmp280.readTemperature();
+  mean_temp = bmp280.readTemperature() + 273.15;
   mean_pressure = bmp280.readPressure();
   floatToString(mean_pressure, pressure1, sizeof(pressure1), 2);
   floatToString(mean_temp, temp_ar, sizeof(temp_ar), 2);
@@ -139,14 +143,22 @@ void loop()
     }
   }
   counter_for_buzzer += 1;
+  
   digitalWrite(8, HIGH);
-  digitalWrite(11, LOW);
-  myFile = SD.open("results.txt", FILE_WRITE);
-   if (myFile) 
-   {
-    myFile.println(tel);
-    myFile.close();
+  digitalWrite(chipSelect, LOW);
+
+  File dataFile = SD.open("result.txt", FILE_WRITE);
+
+  if (dataFile) 
+  {
+    dataFile.println(tel);
+    dataFile.println(rf95.lastRssi(), DEC);
+    dataFile.close();
+  }
+  else
+  {
+    
   }
   digitalWrite(8, LOW);
-  digitalWrite(11, HIGH);
+  digitalWrite(chipSelect, HIGH);
 }
