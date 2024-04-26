@@ -414,8 +414,7 @@ void loop()
         {
           if(command == 8) commands[++index_of_last_number] = 7;
           commands[++index_of_last_number] = command;
-
-          last_command_time = millis(); // - 180000*counter_for_time;
+          last_command_time = millis();
         }
         if (flag == 0)
         {
@@ -423,7 +422,7 @@ void loop()
           {
             if(command == 8) commands[++index_of_last_number] = 7;
             commands[++index_of_last_number] = command;
-            last_command_time = millis();
+            last_command_time = millis(); // - 180000*counter_for_time;
           }
         }
       }
