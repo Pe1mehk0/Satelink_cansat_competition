@@ -1,6 +1,6 @@
 ## Hi everyone,
 
-This is the code for the Satelink team's project in the CanSat competition.
+This is the code for the Satelink team's project in the CanSat competition 2023/2024.
 
 ## 🛰️ What is CanSat:
 
@@ -10,9 +10,8 @@ CanSat is an international challenge organized by the European Space Agency in w
 
 Primary mission:
 
-Our CanSat (satelite) will monitor its altitude while falling using a BMP 280 temperature and pressure sensor; connected to the Adafruit Feather M0, the sensor will activate and using the pressure – temperature correlation formula.
-At 1Hz, will transmit the readings once per second through a 433Mhz LoRa RFM96 radio module with an omnidirectional antenna. The data will then be graphed out to provide us with the descent rate. 
-Knowing the crosswind value and the rate of change of altitude, we will be able to better estimate the position of the can as it falls on the ground.
+CanSat (satelite) will monitor its altitude while falling using a BMP 280 temperature and pressure sensor; connected to the Adafruit Feather M0, the sensor will activate and using the pressure – temperature correlation formula.
+At 1Hz, it will transmit the readings once per second through a 433Mhz LoRa RFM96 radio module with an omnidirectional antenna. The data will then be graphed in a real time and saved on a computer.
 
 Secondary mission:
 
@@ -21,16 +20,16 @@ Commands are then relayed to a rover equipped with a directional receiver antenn
 
 ## 📊 Code:
 
-[CanSat code](Final_code_can.ino) - This file stands for a CanSat's code which allows to send, receive and save data. 
+[CanSat code](Final_code_can.ino) - This file contains the code for the CanSat, enabling it to transmit, receive, and store data.
 
-[Ground Station code](Final_code_gs.ino) - This code stands for a Feather M0 with LoRa RFM96 which is placed on the ground station 
-to receive, send and save data.
+[Ground Station code](Final_code_gs.ino) - This code is designed for a Feather M0 with LoRa RFM96, which is stationed on the ground. 
+It facilitates the reception, transmission, and storage of data.
 
-[Interface code](main.py) - This code stands for the users interface which allows to display life-time data graphs with 
-Altitude, Pressure, Tempreture, RSSI and Speed. Also it allows to type_in commands and transfer them to Feather M0 for further sending.
+[Interface code](main.py) - This code provides a user interface that displays real-time data graphs, including 
+altitude, pressure, temperature, RSSI, and speed. It also allows users to input commands, which are then transferred 
+to the Feather M0 for further transmission.
 
-[Rover code](Final_code_rover.ino) - This code stands for a rover which receives and executes commands, and gather information from sensors. 
-
+[Rover code](Final_code_rover.ino) - This code is for the rover, enabling it to receive and execute commands, as well as gather data from sensors and save them on SD card. 
 
 
 ## 🔮 Links:
